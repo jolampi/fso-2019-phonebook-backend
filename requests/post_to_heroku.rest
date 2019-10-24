@@ -1,0 +1,7 @@
+POST https://salty-chamber-32604.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Aku Ankka",
+    "number": "313"
+}
