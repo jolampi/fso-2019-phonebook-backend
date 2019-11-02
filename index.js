@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-morgan.token('body', function (request, response) {
+morgan.token('body', function (request) {
     const str = JSON.stringify(request.body)
     return (str !== '{}' ) ? str : ' '
 })
@@ -70,7 +70,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-        .then(result => response.status(204).end())
+        .then(() => response.status(204).end())
         .catch(error => next(error))
 })
 
@@ -81,7 +81,7 @@ app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
     console.log(error.message)
-    if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    if (error.name === 'CastError' && error.kind === 'ObjectId') {
         return response.status(400).send({ error: 'malformed id' })
     } else if (error.name === 'ValidationError') {
         return response.status(400).send({ error: error.message })
